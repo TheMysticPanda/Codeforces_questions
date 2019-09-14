@@ -2,32 +2,33 @@
 stored_values=[]
 number_of_queries=int(input())
 for i in range(number_of_queries):
-  
-  count=1 #variable that is just supposed to keep moving forward
-  
-  number_of_students=input()
+    
+  number_of_students=int(input())
   permutations_of_students=input().split()
   
   #converts the list of strings to a list of ints
-  for i in range(len(permutations_of_students)):
+  for i in range(number_of_students):
     permutations_of_students[i]=int(permutations_of_students[i])
+    
   one_starts_at=permutations_of_students.index(1)
 
 
   #checks if they are clock-wise or anti-clockwise
-  variable_holder="YES"
-  for i in range(len(number_of_students)-1):
-    if not((one_starts_at+1)%len(permutations_of_students)==count+1):
-      variable_holder="NO"
-      one_starts_at+=1
-    elif not((one_starts_at-1)%len(permutations_of_students)==count+1):
-      variable_holder="NO"
-      one_starts_at-=1
+  forward_works = "YES"
+  backward_works = "YES"
 
-  stored_values.append(variable_holder)
+  for i in range(number_of_students - 1):
+      forward_index = (one_starts_at+i+1)%number_of_students
+      backward_index = (one_starts_at-i-1)%number_of_students
+      if not(permutations_of_students[forward_index]==i+2):
+        forward_works="NO"
+      if not(permutations_of_students[backward_index]==i+2):
+        backward_works="NO"
 
-for ch in stored_values:
-  print(ch)
+  if (forward_works == "YES" or backward_works == "YES"):
+    print ("YES")
+  else:
+    print ("NO")
     
 
     
