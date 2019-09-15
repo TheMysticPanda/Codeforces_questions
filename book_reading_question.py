@@ -22,14 +22,16 @@ for smaller_list in bigger_list:
 
   for i in range(10):
     first_ten_last_digits[i]=(RequiredDivisor*(i+1))%10
+
+  sum_last_digits=sum(first_ten_last_digits)
  
   
   numberoftimes=numberOfPages//RequiredDivisor
 
-  counter=0
-  for i in range(numberoftimes):
-    summation+=(first_ten_last_digits[counter])
-    counter=(counter+1)%10
+  summation+=((numberoftimes//10)*sum_last_digits)
+  for i in range(numberoftimes%10):
+    summation+=first_ten_last_digits[i]
+  
 
   resulting_values.append(summation)
 
