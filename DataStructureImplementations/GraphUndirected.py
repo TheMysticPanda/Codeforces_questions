@@ -102,20 +102,16 @@ class Graph:
                         return True
             return False
 
-
-
-
     def detect_cycle(self):
         visited_nodes = set()
         unvisited_nodes = set()
         for node in self.nodes:
             unvisited_nodes.add(node)
 
-        starting_node = None
         for node in self.nodes:
             starting_node = node
             break
-
+        
         return self.detect_cycle_dfs(starting_node, starting_node, visited_nodes, unvisited_nodes)
 
     def prims_algorithm(self):
@@ -150,30 +146,75 @@ class Graph:
             tuple_representation.append((edge[0].data, edge[1].data))
         return tuple_representation
 
+
     # def kruskals_algorithm(self):
     #     new_tree = Graph()
     #     new_tree.v = self.v
     #     new_tree.nodes = {}
     #     unsorted_edges = []
 
+
     #     for node in self.nodes:
     #         for neighbour in self.nodes[node]:
-    #             edge = [node, neighbour[0], neighbour[1]]
-    #             unsorted_edges.append(edge)
+    #             if not ([neighbour[0], node, neighbour[1]] in unsorted_edges)cle:
+    #                 edge = [node, neighbour[0], neighbour[1]]
+    #                 unsorted_edges.append(edge)
+        
         
     #     sorted_edges = sorted(unsorted_edges, key=itemgetter(2))
+    #     sorted_edges.reverse()
+
     #     for i in range(-1, -len(sorted_edges),-1):
-    #         new_tree.add_edge(sorted_edges[i][0], sorted_edges[i][1], sorted_edges[i][2])
-    #         if new_tree.detect_cycle_bfs():
-    #             new_tree.remove_edge(sorted_edges[i][0], sorted_edges[i][1], sorted_edges[i][2])
+    #         print(sorted_edges[i][0].data, sorted_edges[i][1].data, sorted_edges[i][2])
+        #     new_tree.add_edge(sorted_edges[i][0], sorted_edges[i][1], sorted_edges[i][2])
+        #     new_tree.print_graph()
+        #     print(sorted_edges[i][0].data, sorted_edges[i][1].data, sorted_edges[i][2])
+        #     if new_tree.detect_cycle():
+        #         new_tree.remove_edge(sorted_edges[i][0], sorted_edges[i][1], sorted_edges[i][2])
 
-    #     tuple_representation = []
-    #     for node in new_tree.nodes:
-    #         for neighbour in node.neighbours:
-    #             tuple_representation.append([node.data, neighbour.data])
+        # tuple_representation = []
+        # for node in new_tree.nodes:
+        #     for neighbour in node.neighbours:
+        #         tuple_representation.append([node.data, neighbour.data])
 
-    #     return tuple_representation
+        # return tuple_representation
+    
+    def djikstra(self, source_node):
+        #if node is not in unvisited, it means it has been visited and does not need to be explored
+        unvisited = set()
+        #parent of where each node comes from
+        parent = {}
+        #distance so far
+        distance = {}
+        for node in self.nodes:
+            print(type(node))
+            unvisited.add(node)
+            distance[node] = float("inf")
+            parent[node] = None
 
+        distance[source_node] = 0
+        current_node = source_node
+        parent[source_node] = source_node
+
+        while len(unvisited) > 0:
+            for neighbour in current_node.neighbours:
+                if neighbour[0] in unvisited:
+                    if distance[neighbour[0]] > distance[current_node] + neighbour[1]:
+                        distance[neighbour[0]] = distance[current_node] + neighbour[1]
+                        parent[neighbour[0]] = current_node
+            
+            unvisited.remove(current_node)
+            minimum_distance = float('inf')
+            for node in unvisited:
+                if distance[node] < minimum_distance:
+                    minimum_distance = distance[node]
+                    current_node = node
+
+        better_dict = {}
+        for key in parent:
+            better_dict[key.data] = parent[key].data
+
+        return better_dict
 
 a = Graph.Node("a")
 b = Graph.Node("b")
@@ -184,21 +225,19 @@ f = Graph.Node("f")
 g = Graph.Node("g")
 graph = Graph()        
 graph.add_edge(a,b,2)
-graph.add_edge(a,c,3)
-graph.add_edge(a,d,3)
-graph.add_edge(b,c,4)
+graph.add_edge(a,d,7)
+graph.add_edge(a,f,5)
+graph.add_edge(a,c,4)
+graph.add_edge(b,d,6)
+graph.add_edge(b,g,8)
 graph.add_edge(b,e,3)
-graph.add_edge(c,e,1)
-graph.add_edge(c,d,5)
-graph.add_edge(d,f,7)
 graph.add_edge(c,f,6)
-graph.add_edge(f,e,8)
-graph.add_edge(f,g,9)
+graph.add_edge(d,f,1)
+graph.add_edge(d,g,6)
+graph.add_edge(e,g,7)
+graph.add_edge(f,g,6)
 
-# graph.print_graph()
-# graph.dfs(a)
-# graph.bfs(a)
-print(graph.detect_cycle_bfs())
+print(graph.djikstra(a))
 
         
 
